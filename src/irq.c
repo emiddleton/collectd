@@ -121,10 +121,10 @@ static void irq_submit (unsigned int irq, derive_t value)
 	value_t values[1];
 	value_list_t vl = VALUE_LIST_INIT;
 	int status;
-
+/*
 	if (check_ignore_irq (irq))
 		return;
-
+*/
 	values[0].derive = value;
 
 	vl.values = values;
@@ -140,6 +140,19 @@ static void irq_submit (unsigned int irq, derive_t value)
 
 	plugin_dispatch_values (&vl);
 } /* void irq_submit */
+
+int irq_parse_value (const char *value, value_t *ret_value)
+{
+  char *endptr = NULL;
+  ret_value->derive = (derive_t) strtoll (value, &endptr, 0);
+  if (value == endptr) {
+    return -1;
+  }
+  else if ((NULL != endptr) && ('\0' != *endptr))
+    WARNING ("parse_value: Ignoring trailing garbage after number: %s.",
+        endptr);
+  return 0;
+} /* int irq_parse_value */
 
 static int irq_read (void)
 {
@@ -182,16 +195,13 @@ static int irq_read (void)
 			value_t v;
 			int status;
 
-			status = parse_value (fields[i], &v, DS_TYPE_DERIVE);
+			status = irq_parse_value (fields[i], &v);
 			if (status != 0)
 				break;
 
 			irq_value += v.derive;
 		} /* for (i) */
-
-		if (i < fields_num)
-			continue;
-
+		
 		irq_submit (irq, irq_value);
 	}
 
