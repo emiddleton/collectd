@@ -380,9 +380,9 @@
 #</Plugin>
 
 #<Plugin irq>
-#	Irq 7
-#	Irq 8
-#	Irq 9
+#	Irq "7"
+#	Irq "8"
+#	Irq "9"
 #	IgnoreSelected true
 #</Plugin>
 

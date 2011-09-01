@@ -1566,7 +1566,7 @@ comment or the number.
 
 =over 4
 
-=item B<Irq> I<Irq>
+=item B<Irq> I"<Irq>"
 
 Select this irq. By default these irqs will then be collected. For a more
 detailed description see B<IgnoreSelected> below.
